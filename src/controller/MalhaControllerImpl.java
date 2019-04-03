@@ -9,7 +9,6 @@ import model.CoordenadasFim;
 import model.Cruzamento;
 import model.Estrada;
 import model.InsereVeiculo;
-import model.MovimentoController;
 import model.MovimentoSemafaro;
 import model.Peca;
 import model.SentidoEstrada;

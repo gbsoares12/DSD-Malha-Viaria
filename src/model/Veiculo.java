@@ -20,7 +20,7 @@ public class Veiculo extends Peca implements Runnable {
     private MalhaControllerImpl controle;
     private boolean celulaDeSaida = false;
     private Peca[][] malhaViaria;
-    
+
     private List<Peca> chaoPercorrido = new ArrayList<>();
 
     public void addChao(Peca chao) {
@@ -47,7 +47,6 @@ public class Veiculo extends Peca implements Runnable {
 
     @Override
     public void run() {
-
 
         malhaViaria = controle.getMalhaTable();
         Random random = new Random();
@@ -116,147 +115,209 @@ public class Veiculo extends Peca implements Runnable {
                         break;
 
                     case ESQUERDA:
-                        if (malhaViaria[this.getLinha()][this.getColuna() - 1].getClass() == Chao.class) {
-                            proxEstrada = (Chao) malhaViaria[this.getLinha()][this.getColuna() - 1];
+                        if (malhaViaria[this.getLinha()][this.getColuna() - 1] == null) {
+                            if (malhaViaria[this.getLinha() + 1][this.getColuna()] != null//verifica para baixo
+                                    && (malhaViaria[this.getLinha() + 1][this.getColuna()].getClass() == Chao.class && malhaViaria[this.getLinha() + 1][this.getColuna()].getSentidoEstrada() != SentidoEstrada.CIMA)) {
 
-                            if (malhaViaria[this.getLinha()][this.getColuna() - 1].getSentidoEstrada() != SentidoEstrada.ESQUERDA) {
-                                novoSentido = malhaViaria[this.getLinha()][this.getColuna() - 1].getSentidoEstrada();
-                                System.out.println("Mudou a direção para " + this.getSentidoEstrada());
+                                proxEstrada = (Chao) malhaViaria[this.getLinha() + 1][this.getColuna()];
+                                this.setSentidoEstrada(malhaViaria[this.getLinha() + 1][this.getColuna()].getSentidoEstrada());
+                                podeContinuarCruzamento = true;
+
+                            } else if ((malhaViaria[this.getLinha() - 1][this.getColuna()] != null) && malhaViaria[this.getLinha() - 1][this.getColuna()].getClass() == Chao.class) {
+
+                                proxEstrada = (Chao) malhaViaria[this.getLinha() - 1][this.getColuna()];
+                                this.setSentidoEstrada(malhaViaria[this.getLinha() - 1][this.getColuna()].getSentidoEstrada());
+                                podeContinuarCruzamento = true;
+
                             }
+                        } else {
 
-                            podeContinuarCruzamento = true; // SEMPRE TRUE POIS NÃO É CRUZAMENTO.
+                            if (malhaViaria[this.getLinha()][this.getColuna() - 1].getClass() == Chao.class) {
+                                proxEstrada = (Chao) malhaViaria[this.getLinha()][this.getColuna() - 1];
 
-                        } else if (malhaViaria[this.getLinha()][this.getColuna() - 1].getClass() == Cruzamento.class) {
-                            proxEstrada = (Cruzamento) malhaViaria[this.getLinha()][this.getColuna() - 1];
-                            decisaoCruzamento = (Cruzamento) proxEstrada;
+                                if (malhaViaria[this.getLinha()][this.getColuna() - 1].getSentidoEstrada() != SentidoEstrada.ESQUERDA) {
+                                    novoSentido = malhaViaria[this.getLinha()][this.getColuna() - 1].getSentidoEstrada();
+                                    System.out.println("Mudou a direção para " + this.getSentidoEstrada());
+                                }
 
-                            switch (defineSaidaCruzamento(decisaoCruzamento)) {
-                                case 0:
-                                    //VERIFICA SE O PROXIMA ESTRADA SELECIONADA DEPOIS DO CRUZAMENTO ESTÁ LIVRE, PARA EVITAR O BLOQUEIO DO MESMO
-                                    if ((malhaViaria[proxEstrada.getLinha() + 1][proxEstrada.getColuna()] != null) && malhaViaria[proxEstrada.getLinha() + 1][proxEstrada.getColuna()].getClass() == Chao.class) {
-                                        novoSentido = SentidoEstrada.BAIXO;
-                                        podeContinuarCruzamento = true;
-                                    }
+                                podeContinuarCruzamento = true; // SEMPRE TRUE POIS NÃO É CRUZAMENTO.
 
-                                    break;
-                                case 1:
-                                    if ((malhaViaria[proxEstrada.getLinha() - 1][proxEstrada.getColuna()] != null) && malhaViaria[proxEstrada.getLinha() - 1][proxEstrada.getColuna()].getClass() == Chao.class) {
-                                        novoSentido = SentidoEstrada.CIMA;
-                                        podeContinuarCruzamento = true;
-                                    }
-                                    break;
-                                case 2:
-                                    if ((malhaViaria[proxEstrada.getLinha()][proxEstrada.getColuna() - 1] != null) && malhaViaria[proxEstrada.getLinha()][proxEstrada.getColuna() - 1].getClass() == Chao.class) {
-                                        novoSentido = SentidoEstrada.ESQUERDA;
-                                        podeContinuarCruzamento = true;
-                                    }
+                            } else if (malhaViaria[this.getLinha()][this.getColuna() - 1].getClass() == Cruzamento.class) {
+                                proxEstrada = (Cruzamento) malhaViaria[this.getLinha()][this.getColuna() - 1];
+                                decisaoCruzamento = (Cruzamento) proxEstrada;
 
-                                    break;
-                                case 3:
-                                    if ((malhaViaria[proxEstrada.getLinha()][proxEstrada.getColuna() + 1] != null) && malhaViaria[proxEstrada.getLinha()][proxEstrada.getColuna() + 1].getClass() == Chao.class) {
-                                        novoSentido = SentidoEstrada.DIREITA;
-                                        podeContinuarCruzamento = true;
-                                    }
+                                switch (defineSaidaCruzamento(decisaoCruzamento)) {
+                                    case 0:
+                                        //VERIFICA SE O PROXIMA ESTRADA SELECIONADA DEPOIS DO CRUZAMENTO ESTÁ LIVRE, PARA EVITAR O BLOQUEIO DO MESMO
+                                        if ((malhaViaria[proxEstrada.getLinha() + 1][proxEstrada.getColuna()] != null) && malhaViaria[proxEstrada.getLinha() + 1][proxEstrada.getColuna()].getClass() == Chao.class) {
+                                            novoSentido = SentidoEstrada.BAIXO;
+                                            podeContinuarCruzamento = true;
+                                        }
 
-                                    break;
+                                        break;
+                                    case 1:
+                                        if ((malhaViaria[proxEstrada.getLinha() - 1][proxEstrada.getColuna()] != null) && malhaViaria[proxEstrada.getLinha() - 1][proxEstrada.getColuna()].getClass() == Chao.class) {
+                                            novoSentido = SentidoEstrada.CIMA;
+                                            podeContinuarCruzamento = true;
+                                        }
+                                        break;
+                                    case 2:
+                                        if ((malhaViaria[proxEstrada.getLinha()][proxEstrada.getColuna() - 1] != null) && malhaViaria[proxEstrada.getLinha()][proxEstrada.getColuna() - 1].getClass() == Chao.class) {
+                                            novoSentido = SentidoEstrada.ESQUERDA;
+                                            podeContinuarCruzamento = true;
+                                        }
+
+                                        break;
+                                    case 3:
+                                        if ((malhaViaria[proxEstrada.getLinha()][proxEstrada.getColuna() + 1] != null) && malhaViaria[proxEstrada.getLinha()][proxEstrada.getColuna() + 1].getClass() == Chao.class) {
+                                            novoSentido = SentidoEstrada.DIREITA;
+                                            podeContinuarCruzamento = true;
+                                        }
+
+                                        break;
+                                }
+
                             }
-
                         }
                         break;
                     case BAIXO:
-                        if (malhaViaria[this.getLinha() + 1][this.getColuna()].getClass() == Chao.class) {
+                        if (malhaViaria[this.getLinha() + 1][this.getColuna()] == null) {
+                            if (malhaViaria[this.getLinha()][this.getColuna() + 1] != null) {//direita
+                                if (malhaViaria[this.getLinha()][this.getColuna() + 1].getClass() == Chao.class && malhaViaria[this.getLinha()][this.getColuna() + 1].getSentidoEstrada() != SentidoEstrada.DIREITA) {
 
-                            proxEstrada = (Chao) malhaViaria[this.getLinha() + 1][this.getColuna()];
+                                    proxEstrada = (Chao) malhaViaria[this.getLinha()][this.getColuna() + 1];
+                                    this.setSentidoEstrada(malhaViaria[this.getLinha()][this.getColuna() + 1].getSentidoEstrada());
+                                    novoSentido = malhaViaria[this.getLinha()][this.getColuna() + 1].getSentidoEstrada();
+                                    podeContinuarCruzamento = true;
 
-                            if (malhaViaria[this.getLinha() + 1][this.getColuna()].getSentidoEstrada() != SentidoEstrada.BAIXO) {
-                                novoSentido = malhaViaria[this.getLinha() + 1][this.getColuna()].getSentidoEstrada();
-                                System.out.println("Mudou a direção para " + this.getSentidoEstrada());
+                                }
+                            } else if ((malhaViaria[this.getLinha()][this.getColuna() - 1] != null) && malhaViaria[this.getLinha()][this.getColuna() - 1].getClass() == Chao.class) {// esquerda
+
+                                proxEstrada = (Chao) malhaViaria[this.getLinha()][this.getColuna() - 1];
+                                this.setSentidoEstrada(malhaViaria[this.getLinha()][this.getColuna() - 1].getSentidoEstrada());
+                                novoSentido = malhaViaria[this.getLinha()][this.getColuna() - 1].getSentidoEstrada();
+                                podeContinuarCruzamento = true;
+
                             }
-                            podeContinuarCruzamento = true; // SEMPRE TRUE POIS NÃO É CRUZAMENTO.
+                        } else {
 
-                        } else if (malhaViaria[this.getLinha() + 1][this.getColuna()].getClass() == Cruzamento.class) {
-                            proxEstrada = (Cruzamento) malhaViaria[this.getLinha() + 1][this.getColuna()];
-                            decisaoCruzamento = (Cruzamento) proxEstrada;
+                            if (malhaViaria[this.getLinha() + 1][this.getColuna()].getClass() == Chao.class) {
 
-                            switch (defineSaidaCruzamento(decisaoCruzamento)) {
-                                //VERIFICA SE O PROXIMA ESTRADA SELECIONADA DEPOIS DO CRUZAMENTO ESTÁ LIVRE, PARA EVITAR O BLOQUEIO DO MESMO
-                                case 0:
-                                    if ((malhaViaria[proxEstrada.getLinha() + 1][proxEstrada.getColuna()] != null) && malhaViaria[proxEstrada.getLinha() + 1][proxEstrada.getColuna()].getClass() == Chao.class) {
-                                        novoSentido = SentidoEstrada.BAIXO;
-                                        podeContinuarCruzamento = true;
-                                    }
+                                proxEstrada = (Chao) malhaViaria[this.getLinha() + 1][this.getColuna()];
 
-                                    break;
-                                case 1:
-                                    if ((malhaViaria[proxEstrada.getLinha() - 1][proxEstrada.getColuna()] != null) && malhaViaria[proxEstrada.getLinha() - 1][proxEstrada.getColuna()].getClass() == Chao.class) {
-                                        novoSentido = SentidoEstrada.CIMA;
-                                        podeContinuarCruzamento = true;
-                                    }
-                                    break;
-                                case 2:
-                                    if ((malhaViaria[proxEstrada.getLinha()][proxEstrada.getColuna() - 1] != null) && malhaViaria[proxEstrada.getLinha()][proxEstrada.getColuna() - 1].getClass() == Chao.class) {
-                                        novoSentido = SentidoEstrada.ESQUERDA;
-                                        podeContinuarCruzamento = true;
-                                    }
+                                if (malhaViaria[this.getLinha() + 1][this.getColuna()].getSentidoEstrada() != SentidoEstrada.BAIXO) {
+                                    novoSentido = malhaViaria[this.getLinha() + 1][this.getColuna()].getSentidoEstrada();
+                                    System.out.println("Mudou a direção para " + this.getSentidoEstrada());
+                                }
+                                podeContinuarCruzamento = true; // SEMPRE TRUE POIS NÃO É CRUZAMENTO.
 
-                                    break;
-                                case 3:
-                                    if ((malhaViaria[proxEstrada.getLinha()][proxEstrada.getColuna() + 1] != null) && malhaViaria[proxEstrada.getLinha()][proxEstrada.getColuna() + 1].getClass() == Chao.class) {
-                                        novoSentido = SentidoEstrada.DIREITA;
-                                        podeContinuarCruzamento = true;
-                                    }
+                            } else if (malhaViaria[this.getLinha() + 1][this.getColuna()].getClass() == Cruzamento.class) {
+                                proxEstrada = (Cruzamento) malhaViaria[this.getLinha() + 1][this.getColuna()];
+                                decisaoCruzamento = (Cruzamento) proxEstrada;
 
-                                    break;
+                                switch (defineSaidaCruzamento(decisaoCruzamento)) {
+                                    //VERIFICA SE O PROXIMA ESTRADA SELECIONADA DEPOIS DO CRUZAMENTO ESTÁ LIVRE, PARA EVITAR O BLOQUEIO DO MESMO
+                                    case 0:
+                                        if ((malhaViaria[proxEstrada.getLinha() + 1][proxEstrada.getColuna()] != null) && malhaViaria[proxEstrada.getLinha() + 1][proxEstrada.getColuna()].getClass() == Chao.class) {
+                                            novoSentido = SentidoEstrada.BAIXO;
+                                            podeContinuarCruzamento = true;
+                                        }
+
+                                        break;
+                                    case 1:
+                                        if ((malhaViaria[proxEstrada.getLinha() - 1][proxEstrada.getColuna()] != null) && malhaViaria[proxEstrada.getLinha() - 1][proxEstrada.getColuna()].getClass() == Chao.class) {
+                                            novoSentido = SentidoEstrada.CIMA;
+                                            podeContinuarCruzamento = true;
+                                        }
+                                        break;
+                                    case 2:
+                                        if ((malhaViaria[proxEstrada.getLinha()][proxEstrada.getColuna() - 1] != null) && malhaViaria[proxEstrada.getLinha()][proxEstrada.getColuna() - 1].getClass() == Chao.class) {
+                                            novoSentido = SentidoEstrada.ESQUERDA;
+                                            podeContinuarCruzamento = true;
+                                        }
+
+                                        break;
+                                    case 3:
+                                        if ((malhaViaria[proxEstrada.getLinha()][proxEstrada.getColuna() + 1] != null) && malhaViaria[proxEstrada.getLinha()][proxEstrada.getColuna() + 1].getClass() == Chao.class) {
+                                            novoSentido = SentidoEstrada.DIREITA;
+                                            podeContinuarCruzamento = true;
+                                        }
+
+                                        break;
+                                }
+
                             }
-
                         }
                         break;
                     case CIMA:
-                        if (malhaViaria[this.getLinha() - 1][this.getColuna()].getClass() == Chao.class) {
+                        if (malhaViaria[this.getLinha() - 1][this.getColuna()] == null) {
+                            if (malhaViaria[this.getLinha()][this.getColuna() + 1] != null
+                                    && malhaViaria[this.getLinha()][this.getColuna() + 1].getClass() == Chao.class && malhaViaria[this.getLinha()][this.getColuna() + 1].getSentidoEstrada() != SentidoEstrada.DIREITA) {//direita
 
-                            proxEstrada = (Chao) malhaViaria[this.getLinha() - 1][this.getColuna()];
+                                proxEstrada = (Chao) malhaViaria[this.getLinha()][this.getColuna() + 1];
+                                this.setSentidoEstrada(malhaViaria[this.getLinha()][this.getColuna() + 1].getSentidoEstrada());
+                                novoSentido = malhaViaria[this.getLinha()][this.getColuna() + 1].getSentidoEstrada();
+                                podeContinuarCruzamento = true;
 
-                            if (malhaViaria[this.getLinha() - 1][this.getColuna()].getSentidoEstrada() != SentidoEstrada.CIMA) {
-                                novoSentido = malhaViaria[this.getLinha() - 1][this.getColuna()].getSentidoEstrada();
-                                System.out.println("Mudou a direção para " + this.getSentidoEstrada());
+                            } else if (malhaViaria[this.getLinha()][this.getColuna() - 1] != null
+                                    && malhaViaria[this.getLinha()][this.getColuna() - 1].getClass() == Chao.class) {
+
+                                proxEstrada = (Chao) malhaViaria[this.getLinha()][this.getColuna() - 1];
+                                this.setSentidoEstrada(malhaViaria[this.getLinha()][this.getColuna() - 1].getSentidoEstrada());
+                                novoSentido = malhaViaria[this.getLinha()][this.getColuna() - 1].getSentidoEstrada();
+                                podeContinuarCruzamento = true;
+                                
                             }
 
-                            podeContinuarCruzamento = true; // SEMPRE TRUE POIS NÃO É CRUZAMENTO.
+                        } else {
 
-                        } else if (malhaViaria[this.getLinha() - 1][this.getColuna()].getClass() == Cruzamento.class) {
-                            proxEstrada = (Cruzamento) malhaViaria[this.getLinha() - 1][this.getColuna()];
+                            if (malhaViaria[this.getLinha() - 1][this.getColuna()].getClass() == Chao.class) {
 
-                            decisaoCruzamento = (Cruzamento) proxEstrada;
+                                proxEstrada = (Chao) malhaViaria[this.getLinha() - 1][this.getColuna()];
 
-                            switch (defineSaidaCruzamento(decisaoCruzamento)) {
-                                //VERIFICA SE O PROXIMA ESTRADA SELECIONADA DEPOIS DO CRUZAMENTO ESTÁ LIVRE, PARA EVITAR O BLOQUEIO DO MESMO
-                                case 0:
-                                    if ((malhaViaria[proxEstrada.getLinha() + 1][proxEstrada.getColuna()] != null) && malhaViaria[proxEstrada.getLinha() + 1][proxEstrada.getColuna()].getClass() == Chao.class) {
-                                        novoSentido = SentidoEstrada.BAIXO;
-                                        podeContinuarCruzamento = true;
-                                    }
+                                if (malhaViaria[this.getLinha() - 1][this.getColuna()].getSentidoEstrada() != SentidoEstrada.CIMA) {
+                                    novoSentido = malhaViaria[this.getLinha() - 1][this.getColuna()].getSentidoEstrada();
+                                    System.out.println("Mudou a direção para " + this.getSentidoEstrada());
+                                }
 
-                                    break;
-                                case 1:
-                                    if ((malhaViaria[proxEstrada.getLinha() - 1][proxEstrada.getColuna()] != null) && malhaViaria[proxEstrada.getLinha() - 1][proxEstrada.getColuna()].getClass() == Chao.class) {
-                                        novoSentido = SentidoEstrada.CIMA;
-                                        podeContinuarCruzamento = true;
-                                    }
-                                    break;
-                                case 2:
-                                    if ((malhaViaria[proxEstrada.getLinha()][proxEstrada.getColuna() - 1] != null) && malhaViaria[proxEstrada.getLinha()][proxEstrada.getColuna() - 1].getClass() == Chao.class) {
-                                        novoSentido = SentidoEstrada.ESQUERDA;
-                                        podeContinuarCruzamento = true;
-                                    }
+                                podeContinuarCruzamento = true; // SEMPRE TRUE POIS NÃO É CRUZAMENTO.
 
-                                    break;
-                                case 3:
-                                    if ((malhaViaria[proxEstrada.getLinha()][proxEstrada.getColuna() + 1] != null) && malhaViaria[proxEstrada.getLinha()][proxEstrada.getColuna() + 1].getClass() == Chao.class) {
-                                        novoSentido = SentidoEstrada.DIREITA;
-                                        podeContinuarCruzamento = true;
-                                    }
+                            } else if (malhaViaria[this.getLinha() - 1][this.getColuna()].getClass() == Cruzamento.class) {
+                                proxEstrada = (Cruzamento) malhaViaria[this.getLinha() - 1][this.getColuna()];
 
-                                    break;
+                                decisaoCruzamento = (Cruzamento) proxEstrada;
+
+                                switch (defineSaidaCruzamento(decisaoCruzamento)) {
+                                    //VERIFICA SE O PROXIMA ESTRADA SELECIONADA DEPOIS DO CRUZAMENTO ESTÁ LIVRE, PARA EVITAR O BLOQUEIO DO MESMO
+                                    case 0:
+                                        if ((malhaViaria[proxEstrada.getLinha() + 1][proxEstrada.getColuna()] != null) && malhaViaria[proxEstrada.getLinha() + 1][proxEstrada.getColuna()].getClass() == Chao.class) {
+                                            novoSentido = SentidoEstrada.BAIXO;
+                                            podeContinuarCruzamento = true;
+                                        }
+
+                                        break;
+                                    case 1:
+                                        if ((malhaViaria[proxEstrada.getLinha() - 1][proxEstrada.getColuna()] != null) && malhaViaria[proxEstrada.getLinha() - 1][proxEstrada.getColuna()].getClass() == Chao.class) {
+                                            novoSentido = SentidoEstrada.CIMA;
+                                            podeContinuarCruzamento = true;
+                                        }
+                                        break;
+                                    case 2:
+                                        if ((malhaViaria[proxEstrada.getLinha()][proxEstrada.getColuna() - 1] != null) && malhaViaria[proxEstrada.getLinha()][proxEstrada.getColuna() - 1].getClass() == Chao.class) {
+                                            novoSentido = SentidoEstrada.ESQUERDA;
+                                            podeContinuarCruzamento = true;
+                                        }
+
+                                        break;
+                                    case 3:
+                                        if ((malhaViaria[proxEstrada.getLinha()][proxEstrada.getColuna() + 1] != null) && malhaViaria[proxEstrada.getLinha()][proxEstrada.getColuna() + 1].getClass() == Chao.class) {
+                                            novoSentido = SentidoEstrada.DIREITA;
+                                            podeContinuarCruzamento = true;
+                                        }
+
+                                        break;
+                                }
+
                             }
 
                         }
@@ -282,7 +343,7 @@ public class Veiculo extends Peca implements Runnable {
                         }
                         malhaViaria[this.getLinha()][this.getColuna()] = this.chaoPercorrido.get(this.chaoPercorrido.size() - 1);
                         controle.retirarVeiculo();
-                        Thread.currentThread().interrupt();
+                       // Thread.currentThread().interrupt();
                     }
                 }
             }

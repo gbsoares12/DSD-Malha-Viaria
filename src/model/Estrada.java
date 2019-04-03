@@ -5,6 +5,7 @@
  */
 package model;
 
+import controller.MovimentoController;
 import javax.swing.Icon;
 
 /**
