@@ -49,7 +49,7 @@ public class TelaMalha implements Observador {
         malhaTable = new JTable();
 
         malhaTable.setModel(new MalhaViaria(linha, coluna));
-        malhaTable.setDefaultRenderer(Object.class, new NewJFrame.MalhaRenderer());
+        malhaTable.setDefaultRenderer(Object.class, new Inicio.MalhaRenderer());
 
         JPanel jpControle = new JPanel();
         JScrollPane scrollPane = new JScrollPane(malhaTable);

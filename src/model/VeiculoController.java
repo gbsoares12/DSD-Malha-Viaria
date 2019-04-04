@@ -66,7 +66,7 @@ public class VeiculoController {
 
                         if (malhaViaria[this.veiculo.getLinha()][this.veiculo.getColuna() + 1].getSentidoEstrada() != SentidoEstrada.DIREITA) {
                             novoSentido = malhaViaria[this.veiculo.getLinha()][this.veiculo.getColuna() + 1].getSentidoEstrada();
-                            System.out.println("Mudou a direção para " + this.veiculo.getSentidoEstrada());
+                           //System.out.println("Mudou a direção para " + this.veiculo.getSentidoEstrada());
                         }
 
                         podeContinuarCruzamento = true; // SEMPRE TRUE POIS NÃO É CRUZAMENTO.
@@ -132,7 +132,7 @@ public class VeiculoController {
 
                             if (malhaViaria[this.veiculo.getLinha()][this.veiculo.getColuna() - 1].getSentidoEstrada() != SentidoEstrada.ESQUERDA) {
                                 novoSentido = malhaViaria[this.veiculo.getLinha()][this.veiculo.getColuna() - 1].getSentidoEstrada();
-                                System.out.println("Mudou a direção para " + this.veiculo.getSentidoEstrada());
+                              //  System.out.println("Mudou a direção para " + this.veiculo.getSentidoEstrada());
                             }
 
                             podeContinuarCruzamento = true; // SEMPRE TRUE POIS NÃO É CRUZAMENTO.
@@ -202,7 +202,7 @@ public class VeiculoController {
 
                             if (malhaViaria[this.veiculo.getLinha() + 1][this.veiculo.getColuna()].getSentidoEstrada() != SentidoEstrada.BAIXO) {
                                 novoSentido = malhaViaria[this.veiculo.getLinha() + 1][this.veiculo.getColuna()].getSentidoEstrada();
-                                System.out.println("Mudou a direção para " + this.veiculo.getSentidoEstrada());
+                            //    System.out.println("Mudou a direção para " + this.veiculo.getSentidoEstrada());
                             }
                             podeContinuarCruzamento = true; // SEMPRE TRUE POIS NÃO É CRUZAMENTO.
 
@@ -272,7 +272,7 @@ public class VeiculoController {
 
                             if (malhaViaria[this.veiculo.getLinha() - 1][this.veiculo.getColuna()].getSentidoEstrada() != SentidoEstrada.CIMA) {
                                 novoSentido = malhaViaria[this.veiculo.getLinha() - 1][this.veiculo.getColuna()].getSentidoEstrada();
-                                System.out.println("Mudou a direção para " + this.veiculo.getSentidoEstrada());
+                        //        System.out.println("Mudou a direção para " + this.veiculo.getSentidoEstrada());
                             }
 
                             podeContinuarCruzamento = true; // SEMPRE TRUE POIS NÃO É CRUZAMENTO.
@@ -324,7 +324,7 @@ public class VeiculoController {
                 for (CoordenadasFim coordenadasFim : listaFim) {
                     if (coordenadasFim.getLinha() == proxEstrada.getLinha() && coordenadasFim.getColuna() == proxEstrada.getColuna()) {
                         celulaDeSaida = true;
-                        System.out.println("Chegou no fim");
+               //         System.out.println("Chegou no fim");
                     }
                 }
 

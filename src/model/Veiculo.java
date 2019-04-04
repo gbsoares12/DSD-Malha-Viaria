@@ -17,10 +17,6 @@ import javax.swing.ImageIcon;
  */
 public class Veiculo extends Peca implements Runnable {
 
-    private MalhaControllerImpl controle;
-    private boolean celulaDeSaida = false;
-    private Peca[][] malhaViaria;
-
     private List<Peca> chaoPercorrido = new ArrayList<>();
 
     public void addChao(Peca chao) {
@@ -46,7 +42,6 @@ public class Veiculo extends Peca implements Runnable {
     public Veiculo(String numeroCarro, SentidoEstrada se, int linha, int coluna) {
 
         super(new ImageIcon("imagem/carro-" + numeroCarro + ".png"), se, linha, coluna);
-        controle = MalhaControllerImpl.getInstance();
     }
 
     @Override
@@ -60,9 +55,7 @@ public class Veiculo extends Peca implements Runnable {
             
         }
     }
-
     
-
     @Override
     public String toString() {
         return "Veiculo: chaoPercorrido: " + chaoPercorrido.get(this.chaoPercorrido.size() - 2) + '}';
