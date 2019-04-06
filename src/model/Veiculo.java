@@ -18,9 +18,14 @@ import javax.swing.ImageIcon;
 public class Veiculo extends Peca implements Runnable {
 
     private List<Peca> chaoPercorrido = new ArrayList<>();
+    private boolean paradaForcada = false;
 
     public void addChao(Peca chao) {
         chaoPercorrido.add(chao);
+    }
+
+    public void setParadaForcada(boolean paradaForcada) {
+        this.paradaForcada = paradaForcada;
     }
 
     public Peca inicioChaoPercorrido() {
@@ -30,8 +35,8 @@ public class Veiculo extends Peca implements Runnable {
     public Peca penultimoChaoPercorrido() {
         return chaoPercorrido.get(chaoPercorrido.size() - 2);
     }
-    
-    public Peca ultimoChaoPercorrido(){
+
+    public Peca ultimoChaoPercorrido() {
         return chaoPercorrido.get(chaoPercorrido.size() - 1);
     }
 
@@ -48,14 +53,18 @@ public class Veiculo extends Peca implements Runnable {
     public void run() {
         VeiculoController vc = new VeiculoController(this);
         boolean stop = false;
-        
-        while (!stop) {
-            
+
+        while (!stop && !this.paradaForcada) {
+
             stop = vc.mover();
-            
+
+        }
+        
+        if (this.paradaForcada) {
+            vc.forcarParada();
         }
     }
-    
+
     @Override
     public String toString() {
         return "Veiculo: chaoPercorrido: " + chaoPercorrido.get(this.chaoPercorrido.size() - 2) + '}';

@@ -22,5 +22,6 @@ public interface MalhaController extends Observado{
     void iniciaCarros(int quantidade, int tempoInsercao);
     void inseriuCarro();
     void encerrarCriacao();
+    void encerrarAplicacao();
     
 }

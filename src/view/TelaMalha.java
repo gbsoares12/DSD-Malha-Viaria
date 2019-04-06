@@ -54,8 +54,10 @@ public class TelaMalha implements Observador {
         JPanel jpControle = new JPanel();
         JScrollPane scrollPane = new JScrollPane(malhaTable);
         JButton jbStop = new JButton("Parar Aplicação");
+        JButton jbEncerrar = new JButton("Encerrar Aplicação");
 
         JLabel jlInfQuantidade = new JLabel("Quantidade atual de carros:");
+        jpControle.add(jbEncerrar, BorderLayout.CENTER);
         jpControle.add(jbStop, BorderLayout.CENTER);
         jpControle.add(jlInfQuantidade, BorderLayout.WEST);
         jpControle.add(jlQuantidadeCarroAtual, BorderLayout.EAST);
@@ -69,12 +71,25 @@ public class TelaMalha implements Observador {
 
         f.setVisible(true);
 
-        //Configurações botão voltar rodada
+        //Configurações botão stop
         jbStop.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 try {
                     controle.encerrarCriacao();
+
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage());
+                }
+            }
+        });
+        
+        //Configurações botão encerrar aplicação
+        jbEncerrar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                try {
+                    controle.encerrarAplicacao();
 
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, e.getMessage());
@@ -91,6 +106,11 @@ public class TelaMalha implements Observador {
     @Override
     public void notificaQuantidadeAtualCarro(int carros) {
         this.jlQuantidadeCarroAtual.setText(carros + "");
+    }
+
+    @Override
+    public void notificaEncerrouAplicacao() {
+        this.jlQuantidadeCarroAtual.setText(0 + "");
     }
 
     }

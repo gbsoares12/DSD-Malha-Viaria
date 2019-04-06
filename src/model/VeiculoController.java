@@ -20,27 +20,16 @@ public class VeiculoController {
     private boolean celulaDeSaida = false;
     private Peca[][] malhaViaria;
     private Veiculo veiculo;
-    private List<Peca> chaoPercorrido = new ArrayList<>();
 
     public VeiculoController(Veiculo veiculo) {
         this.veiculo = veiculo;
         this.controle = MalhaControllerImpl.getInstance();
     }
-
-    public void addChao(Peca chao) {
-        chaoPercorrido.add(chao);
-    }
-
-    public Peca inicioChaoPercorrido() {
-        return chaoPercorrido.get(0);
-    }
-
-    public Peca penultimoChaoPercorrido() {
-        return chaoPercorrido.get(chaoPercorrido.size() - 2);
-    }
-
-    public List<Peca> getChaoPercorrido() {
-        return chaoPercorrido;
+    
+    public void forcarParada(){
+        malhaViaria[this.veiculo.getLinha()][this.veiculo.getColuna()] = veiculo.ultimoChaoPercorrido();
+        controle.atualizouMalha();
+        
     }
 
     public boolean mover() {

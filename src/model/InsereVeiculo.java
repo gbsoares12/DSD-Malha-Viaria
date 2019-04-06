@@ -65,8 +65,8 @@ public class InsereVeiculo implements Runnable {
                         carro.casaAtual(listaInicios.get(randomPosition).getLinha(), listaInicios.get(randomPosition).getColuna());//CONFIGURA A CELULA QUE O VEICULO SE ENCONTRA
 
                         carro.setSentidoEstrada(pecaInicio.getSentidoEstrada());
-
                         inseriu = true;
+                        controle.addCarro(carro);
                     }
                     if (inseriu && malhaDoControle[listaInicios.get(randomPosition).getLinha()][listaInicios.get(randomPosition).getColuna()].getClass() == Veiculo.class) {
                         stop = true;

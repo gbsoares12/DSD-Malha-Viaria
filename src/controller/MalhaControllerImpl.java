@@ -12,6 +12,7 @@ import model.InsereVeiculo;
 import model.MovimentoSemafaro;
 import model.Peca;
 import model.SentidoEstrada;
+import model.Veiculo;
 
 /**
  *
@@ -29,6 +30,7 @@ public class MalhaControllerImpl implements MalhaController {
     private List<Estrada> listaCruzamento = new ArrayList<>();
     private List<Observador> observadores = new ArrayList<>();
     private Peca[][] malhaTable;
+    private List<Veiculo> listaVeiculos = new ArrayList<>();
 
     private static MalhaControllerImpl instance;//Padrão Singleton
 
@@ -41,6 +43,14 @@ public class MalhaControllerImpl implements MalhaController {
 
     public List<Estrada> getListaChao() {
         return listaChao;
+    }
+
+    public List<Veiculo> getListaVeiculos() {
+        return listaVeiculos;
+    }
+
+    public void setListaVeiculos(List<Veiculo> listaVeiculos) {
+        this.listaVeiculos = listaVeiculos;
     }
 
     public int getQuantidadeMinima() {
@@ -78,6 +88,10 @@ public class MalhaControllerImpl implements MalhaController {
     @Override
     public void addObservador(Observador obs) {
         this.observadores.add(obs);
+    }
+    
+    public void addCarro(Veiculo v){
+        this.listaVeiculos.add(v);
     }
 
     @Override
@@ -322,6 +336,16 @@ public class MalhaControllerImpl implements MalhaController {
             observadore.notificaQuantidadeAtualCarro(quantidadeCarros);
         }
 
+    }
+
+    @Override
+    public void encerrarAplicacao() {
+        for (Veiculo listaVeiculo : listaVeiculos) {
+            listaVeiculo.setParadaForcada(true);
+        }
+        for (Observador obs : observadores) {
+            obs.notificaEncerrouAplicacao();
+        }
     }
 
 }

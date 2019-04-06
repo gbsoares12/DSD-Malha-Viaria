@@ -15,4 +15,5 @@ public interface Observador {
     
     public void notificaAtualizouMalha();
     public void notificaQuantidadeAtualCarro(int carros);
+    public void notificaEncerrouAplicacao();
 }
